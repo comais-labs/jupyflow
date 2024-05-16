@@ -2,30 +2,35 @@
 - name: Install jupyterhub docker
   hosts: jupyflow
   vars:
-    port_extenal: 8004
+    port_extenal: "{{ port_external }}"
     port_docker: 8000
-    name_container: jupyterhub4
+    name_container: "{{ tag_container }}"
   become: yes
 
   
   tasks:
+    - name: Execute docker login
+      command: docker login --username=comaisuft --password-stdin
+      args:
+        stdin: "srcomais01"
+
     - name: Pull 3b docker image
       command: docker pull comaisuft/jupyflow:latest
     - name: Create jupyterhub docker container
       command: "docker run -d --name {{name_container}} -p {{port_extenal}}:{{port_docker}} comaisuft/jupyflow:latest"
     #install haproxy
-    - name: Install haproxy
-      apt:
-        name: haproxy
-        state: present  
-    - name: Install haproxy
-      apt:
-        name: haproxy
-        state: present  
-    - name: "starting haproxy services"
-      service:
-        name: "haproxy"
-        state: started
+    # - name: Install haproxy
+    #   apt:
+    #     name: haproxy
+    #     state: present  
+    # - name: Install haproxy
+    #   apt:
+    #     name: haproxy
+    #     state: present  
+    # - name: "starting haproxy services"
+    #   service:
+    #     name: "haproxy"
+    #     state: started
 
     #- name: Enable server in 'www' backend pool
     #  community.general.haproxy:
