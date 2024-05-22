@@ -31,11 +31,12 @@ class TurmasCreateView(FormView):
         alunos = alunos.split(' ')
 
         try:
-            container = setup.ContainerSetup(
-                container=form.instance.container,
-                alunos=alunos
-            )
-            container.setup()
+            print('Criando container...')
+            # container = setup.ContainerSetup(
+            #     container=form.instance.container,
+            #     alunos=alunos
+            # )
+            # container.setup()
         except Exception as error:
             print(error)
 
