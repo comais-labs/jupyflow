@@ -5,7 +5,7 @@ from django.db import models
 class ContainerTurma(models.Model):
     nome_container = models.CharField("Tag do Container", max_length=20, null=False, unique=True)
     ansible_log = models.TextField("Log do Ansible", null=True)
-    ativo = models.CharField("Ativo", default=False)
+    ativo = models.BooleanField("Ativo", default=False)
 
 class Turma(models.Model):
     nome_curso = models.CharField("Nome do curso", max_length=200, null=False)

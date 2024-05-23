@@ -1,27 +1,43 @@
+{% extends 'base/base.html' %}
 
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-  </head>
-  <header>
-		<div class="">
+{% block conteudo %}
+<div class="content-container mt-3">
+	<div class="container">
+		<div class="d-flex justify-content-end">
+			<a  style="background-color:#00897B;"
+				class="border rounded px-3 py-2 text-white" 
+				href="{% url 'turmas:criar' %}">Criar nova turma</a>
 		</div>
-  </header>
-  <body>
-    <main>
-        {% for turma in turmas %}
-			{{ turma }}
-			{{ turma.container.ativo }}
-			<br> {{ turma.container.ansible_log }}
+
+		<div class="mb-2 turmas-list-title arimo-bold">
+			Turmas
+		</div>
+		{% for turma in turmas %}
+		<div class="flex-column row border rounded p-3 my-3">
+			<div class="d-flex justify-content-between">
+				<div>
+					{{ turma }} - {{ turma.container.nome_container }}
+				</div>
+				{% if not turma.container.ativo %}
+				<div 
+					style="background-color:#f0dada;width:10%;" 
+					class="d-flex justify-content-center border rounded border-danger py-1 text-danger">
+					Inativo
+				</div>
+				{% else %}
+				<div 
+					style="background-color:#daf0db;width:10%;" 
+					class="d-flex justify-content-center border rounded border-success py-1 text-success">
+					Rodando 
+				</div>
+				{% endif %}
+			</div>
+			<div class="d-flex px-4 py-2 justify-content-end">
+				<a href="/"> Ver mais</a>
+			</div>
+		</div>
 		{% endfor %}  
-    </main>
-	<script src="index.js"></script>
-  </body>
-</html>
+	</div>
+</div>
+{% endblock conteudo %}
+

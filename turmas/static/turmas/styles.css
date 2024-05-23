@@ -1,0 +1,23 @@
+* {
+	margin: 0;
+}
+
+.base-header{
+	width: 100%;
+	padding-block: 2rem;
+	padding-left: 1rem;
+	display: flex;
+	background-color: #02141E;
+}
+
+.header-title {
+	color: white;
+	font-size: 24px;
+	margin: 0;
+}
+
+.arimo-bold {
+	font-family: "Arimo", sans-serif;
+	font-weight: bold;
+}
+
