@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
 from ansible import setup
+from google_api.api import GoogleAPI
 from turmas.forms import TurmaForm
 from turmas.models import Turma
 
@@ -16,8 +17,10 @@ class TurmasIndexView(TemplateView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["turmas"] = Turma.objects.all()
+
+        google_api = GoogleAPI()
+
         return context
-    
 
 class TurmasCreateView(FormView):
     template_name = "turmas/turma_create.html"
@@ -25,7 +28,7 @@ class TurmasCreateView(FormView):
     success_url = reverse_lazy("turmas:index")
 
     def form_valid(self, form):
-        form.save()
+        # form.save()
         nome_container = self.request.POST.get('nome_container')
         alunos = self.request.POST.get('lista_alunos')
         alunos = alunos.split(' ')
