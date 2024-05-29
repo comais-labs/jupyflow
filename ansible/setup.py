@@ -12,7 +12,6 @@ class ContainerSetup:
         usuarios = []
 
         for aluno in self.alunos:
-            aluno = aluno[:aluno.index("@")]
             usuarios.append({"user": aluno, "password": aluno})
 
         self.alunos = usuarios

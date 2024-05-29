@@ -17,7 +17,6 @@ class TurmasIndexView(TemplateView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["turmas"] = Turma.objects.all()
-
         google_api = GoogleAPI()
 
         return context
@@ -28,20 +27,25 @@ class TurmasCreateView(FormView):
     success_url = reverse_lazy("turmas:index")
 
     def form_valid(self, form):
-        # form.save()
+        instance = form.save()
         nome_container = self.request.POST.get('nome_container')
         alunos = self.request.POST.get('lista_alunos')
         alunos = alunos.split(' ')
 
         try:
             print('Criando container...')
-            # container = setup.ContainerSetup(
-            #     container=form.instance.container,
-            #     alunos=alunos
-            # )
-            # container.setup()
+            container = setup.ContainerSetup(
+                container=form.instance.container,
+                alunos=form.instance.alunos
+            )
+            container.setup()
         except Exception as error:
             print(error)
 
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        breakpoint()     
+        return response
     

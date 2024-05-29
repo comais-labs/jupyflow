@@ -32,28 +32,19 @@ class TurmaForm(forms.ModelForm):
         formulario = cleaned_data.get('formulario')
 
         if not lista_alunos and not formulario:
-            raise forms.ValidationError("Escolha a lista de alunos da turma")
+            self.add_error('lista_alunos', "Escolha a lista de alunos da turma")
+            self.add_error('formulario', "Escolha a lista de alunos da turma")
 
-        print('oi')
         formulario_id = self.cleaned_data.get('formulario')
         if formulario_id:
             self._get_lista_alunos_formulario(formulario_id)
 
-
         return cleaned_data
-
-    def clean_lista_alunos(self):
-        lista_alunos = self.cleaned_data.get('lista_alunos')
-        if not lista_alunos:
-            raise forms.ValidationError("A lista de alunos não pode estar vazia")
-
-        lista_alunos = lista_alunos.split(' ')
-        return lista_alunos
 
     def clean_nome_container(self):
         nome_container = self.cleaned_data.get('nome_container')
         if not nome_container:
-            raise forms.ValidationError("O nome do container não pode estar vazio.")
+            self.add_error('nome_container', "O nome do container não pode estar vazio.")
 
         if ' ' in nome_container:
             self.add_error('nome_container', "Não podem haver espaços no nome do container")
@@ -62,7 +53,7 @@ class TurmaForm(forms.ModelForm):
 
     def _get_lista_alunos_formulario(self, formulario_id):
         print(f'formulario id {formulario_id}')
-        email_question_id = google_api.get_formulario_email_question_id(formulario_id)
+        _, email_question_id = google_api.get_formulario_email_question_id(formulario_id)
         lista_emails = google_api.get_lista_email_alunos(formulario_id, email_question_id)
         
         if lista_emails:
