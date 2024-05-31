@@ -2,7 +2,7 @@ from typing import Any
 from django import forms
 
 from google_api.api import GoogleAPI
-from turmas.models import ContainerTurma, Turma
+from turmas.models import ContainerTurma, Turma, Aluno, get_porta_default, UltimaPorta
 
 google_api = GoogleAPI()
 
@@ -24,7 +24,14 @@ class TurmaForm(forms.ModelForm):
 
         self.fields['nome_container'] = forms.CharField(label="Nome do container", max_length=20, required=True)
         self.fields['lista_alunos'] = forms.CharField(label="Lista de alunos", required=False)
-        self.fields['formulario'] = forms.ChoiceField(label="Formulários", choices=FORMULARIOS, widget=forms.Select(), required=False)
+        self.fields['formulario'] = forms.ChoiceField(
+            label="Formulários", choices=FORMULARIOS, widget=forms.Select(), required=False
+        )
+        self.fields['porta'] = forms.CharField(
+            label="Porta do container",
+            required=False,
+            widget=forms.TextInput(attrs={'placeholder':get_porta_default()})
+        )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -34,10 +41,6 @@ class TurmaForm(forms.ModelForm):
         if not lista_alunos and not formulario:
             self.add_error('lista_alunos', "Escolha a lista de alunos da turma")
             self.add_error('formulario', "Escolha a lista de alunos da turma")
-
-        formulario_id = self.cleaned_data.get('formulario')
-        if formulario_id:
-            self._get_lista_alunos_formulario(formulario_id)
 
         return cleaned_data
 
@@ -51,33 +54,23 @@ class TurmaForm(forms.ModelForm):
 
         return nome_container
 
-    def _get_lista_alunos_formulario(self, formulario_id):
-        print(f'formulario id {formulario_id}')
-        _, email_question_id = google_api.get_formulario_email_question_id(formulario_id)
-        lista_emails = google_api.get_lista_email_alunos(formulario_id, email_question_id)
-        
-        if lista_emails:
-            lista_alunos = [
-                aluno[:aluno.index('@')].replace('.', '').lower()
-                for aluno in lista_emails
-            ]
+    def clean_porta(self):
+        porta = self.cleaned_data.get('porta')
+        if not porta:
+            porta = get_porta_default()
 
-            return lista_alunos
-        return []
+        ultima_porta = UltimaPorta.objects.first()
+        ultima_porta.ultima_porta = str(int(ultima_porta.ultima_porta) + 1)
+        ultima_porta.save()
 
+        return porta
 
     def save(self, commit=True) -> Any:
         instance = super().save(commit=False)
         
-        formulario_id = self.cleaned_data.get('formulario')
-        if formulario_id:
-            instance.alunos = self._get_lista_alunos_formulario(formulario_id)
-            print(instance.alunos)
-
-        # instance.alunos = self.cleaned_data.get('lista_alunos')
-
         container = ContainerTurma.objects.create(
             nome_container=self.cleaned_data.get('nome_container'),
+            porta=self.cleaned_data.get('porta'),
         )
 
         instance.container = container
@@ -86,3 +79,8 @@ class TurmaForm(forms.ModelForm):
             instance.save()
 
         return instance
+
+class AlunoForm(forms.ModelForm):
+    class Meta:
+        model = Aluno
+        exclude = ['turma']

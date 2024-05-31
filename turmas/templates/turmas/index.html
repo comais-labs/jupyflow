@@ -34,7 +34,7 @@
 				{% endif %}
 			</div>
 			<div class="d-flex px-4 py-2 justify-content-end">
-				<a href="/"> Ver mais</a>
+				<a href="{% url 'turmas:ver' turma.pk %}"> Ver mais</a>
 			</div>
 		</div>
 		{% endfor %}  

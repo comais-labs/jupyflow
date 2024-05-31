@@ -46,6 +46,18 @@
 			{% endif %}
 		</div>
 
+        <div class="row flex-column mt-3">
+            <b>{{ form.porta.label }}:</b>
+            {{ form.porta }}
+            {% if form.porta.errors %}
+                <ul class="m-0 mt-2">
+                    {% for error in form.porta.errors %}
+                        <li class="text-danger">{{error}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
 		<div class="row flex-column mt-3">
 			<select id="tipo_lista">
 				<option value="none">Selecionar...</option>

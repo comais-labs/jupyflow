@@ -17,26 +17,7 @@
     - name: Pull 3b docker image
       command: docker pull comaisuft/jupyflow:latest
     - name: Create jupyterhub docker container
-      command: "docker run -d --name {{name_container}} -p {{port_extenal}}:{{port_docker}} comaisuft/jupyflow:latest"
-    #install haproxy
-    # - name: Install haproxy
-    #   apt:
-    #     name: haproxy
-    #     state: present  
-    # - name: Install haproxy
-    #   apt:
-    #     name: haproxy
-    #     state: present  
-    # - name: "starting haproxy services"
-    #   service:
-    #     name: "haproxy"
-    #     state: started
-
-    #- name: Enable server in 'www' backend pool
-    #  community.general.haproxy:
-    #   state: enabled
-    #   host: jupyflow
-     #  backend: 192.168.0.8:8002
+      command: "docker run -d -e TURMA='/{{name_container}}/' --name {{name_container}} -p {{port_extenal}}:{{port_docker}} comaisuft/jupyflow:latest"
 
     - name: Adicionar usuário no container
       community.docker.docker_container_exec:
@@ -45,25 +26,25 @@
        chdir: /root
       loop:
         "{{ users }}"
-      register: result
-
-
-    - name: Print stdout
-      ansible.builtin.debug:
-        var: result.stdout  
 
     - name: Atualizar PATH
       community.docker.docker_container_exec:
-       container: "{{name_container}}"
-       user: "{{item.user}}"
-       #atualiza o PATH para incluir o diretório .local/bin
-       command: /bin/bash -c 'echo "export PATH=$PATH:/home/{{item.user}}/.local/bin" >> /home/{{item.user}}/.bashrc'
-       chdir: /home/{{item.user}} 
+        container: "{{ name_container }}"
+        user: "{{ item.user }}"
+        command: /bin/bash -c 'echo "export PATH=$PATH/home/{{item.user}}/.local/bin" >> /home/{{item.user}}/.bashrc'
+        chdir: /home/{{item.user}}
       loop:
         "{{ users }}"
-      register: result
 
-    #- name: Print stdout
-    #  ansible.builtin.debug:
-    #    var: result.stdout
-      
+    - name: Configura HAProxy
+      template:
+        src: haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+      notify:
+        - restart haproxy
+
+  handlers:
+    - name: restart haproxy
+      service:
+        name: haproxy
+        state: restarted

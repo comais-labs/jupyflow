@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block titulo %} - Teste {% endblock titulo %}
+
+{% block conteudo %}
+<div class="container mt-3">
+    <div class="border rounded p-3">
+        <div class="py-2">
+            <p style="font-size: 18px;" class="arimo-bold m-0">
+                Turma {{ turma.nome_turma }} do curso {{ turma.nome_curso }}
+            </p>
+        </div>
+        <div>
+            <p style="font-size: 16px;" class="arimo-bold m-0">
+                Tag do container:
+            </p>
+            {{ turma.container.nome_container }}
+        </div>
+        <div>
+            <p style="font-size: 16px;" class="arimo-bold m-0">
+                Porta do container:
+            </p>
+            {{ turma.container.porta }}
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+        <a href="{% url 'turmas:aluno_criar' turma.pk %}"
+           style="background-color:#00897B;font-weight:bold;"
+           class="btn w-25 text-white">Adicionar Alunos</a>
+        </div>
+    </div>
+
+
+</div>
+{% endblock conteudo %}

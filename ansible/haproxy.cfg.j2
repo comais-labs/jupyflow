@@ -1,0 +1,30 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    maxconn 2000
+    user haproxy
+    group haproxy
+    daemon
+defaults
+    log global
+    mode http
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
+frontend http_front
+    bind *:80
+    stats uri /haproxy?stats
+    #bind *:443 ssl crt /etc/ssl/certs/mycert.pem
+
+    {% for turma in turmas %}
+    acl url_{{ turma.nome_turma }} path_beg /{{turma.nome_turma}}
+    use_backend {{ turma.nome_turma }} if url_{{ turma.nome_turma }}
+    {% endfor %}
+{% for turma in turmas %}
+backend {{ turma.nome_turma }}
+
+    http-request set-header X-Real-IP %[src]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    http-request add-header X-Forwarded-For %[src]
+    server srv_{{ turma.nome_turma }} 127.0.0.1:{{ turma.porta }} check
+{% endfor %}
