@@ -3,6 +3,7 @@ from django import forms
 
 from google_api.api import GoogleAPI
 from turmas.models import ContainerTurma, Turma, Aluno, get_porta_default, UltimaPorta
+from ansible.setup import AnsibleManager
 
 google_api = GoogleAPI()
 
@@ -32,6 +33,7 @@ class TurmaForm(forms.ModelForm):
             required=False,
             widget=forms.TextInput(attrs={'placeholder':get_porta_default()})
         )
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -68,13 +70,6 @@ class TurmaForm(forms.ModelForm):
     def save(self, commit=True) -> Any:
         instance = super().save(commit=False)
         
-        container = ContainerTurma.objects.create(
-            nome_container=self.cleaned_data.get('nome_container'),
-            porta=self.cleaned_data.get('porta'),
-        )
-
-        instance.container = container
-
         if commit == True:
             instance.save()
 
@@ -84,3 +79,11 @@ class AlunoForm(forms.ModelForm):
     class Meta:
         model = Aluno
         exclude = ['turma']
+
+class AlunoCreateForm(AlunoForm):
+    def save(self, commit=True) -> Aluno:
+        instance = super().save()
+        # TODO: Lógica para adicionar aluno como usuário no container
+        if commit:
+            instance.save()
+        return instance

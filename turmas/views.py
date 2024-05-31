@@ -1,16 +1,13 @@
 from typing import Any
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, DetailView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView
 
 from ansible import setup
 from google_api.api import GoogleAPI
 from turmas.forms import TurmaForm, AlunoForm
 from turmas.models import ContainerTurma, Turma, Aluno
-
-
-
-
+from ansible.setup import AnsibleManager
 
 class TurmasIndexView(TemplateView):
     template_name = "turmas/index.html"
@@ -27,54 +24,53 @@ class TurmasCreateView(FormView):
     form_class = TurmaForm
     success_url = reverse_lazy("turmas:index")
 
-    @staticmethod
-    def _get_lista_alunos_formulario(formulario_id):
-        print(f' view formulario id {formulario_id}')
+    def _get_lista_alunos_formulario(self):
         google_api = GoogleAPI()
-        _, email_question_id = google_api.get_formulario_email_question_id(formulario_id)
-        lista_emails = google_api.get_lista_email_alunos(formulario_id, email_question_id)
-        if lista_emails:
-            lista_alunos = [
+        formulario_id = self.request.POST.get('formulario')
+        if formulario_id != '0':
+            _, email_question_id = google_api.get_formulario_email_question_id(formulario_id)
+            lista_emails = google_api.get_lista_email_alunos(formulario_id, email_question_id)
+            if lista_emails:
+                return [
+                    aluno[:aluno.index('@')].replace('.', '').lower()
+                    for aluno in lista_emails
+                ]
+        return []
+
+    def _get_lista_alunos_manual(self):
+        lista_alunos = self.request.POST.get('lista_alunos')
+        if lista_alunos:
+            return [
                 aluno[:aluno.index('@')].replace('.', '').lower()
-                for aluno in lista_emails
+                for aluno in lista_alunos.split()
             ]
-
-            return lista_alunos
-
         return []
 
     def form_valid(self, form):
         try:
             instance = form.save()
-            alunos = []
+            container = ContainerTurma.objects.create(
+                nome_container=form.cleaned_data.get('nome_container'),
+                porta=form.cleaned_data.get('porta'),
+            )
 
-            formulario_id = self.request.POST.get("formulario")
-            lista_alunos = self.request.POST.get("lista_alunos")
-
-            if formulario_id != '0':
-                alunos = self._get_lista_alunos_formulario(formulario_id)
-            else:
-                alunos = lista_alunos.split(' ')
+            alunos = self._get_lista_alunos_formulario()
+            if not alunos:
+                alunos = self._get_lista_alunos_manual()
 
             for aluno in alunos:
-
-                aluno = Aluno.objects.create(
+                Aluno.objects.create(
                     nome=aluno,
                     senha=aluno,
                     turma=instance,
                 )
-                print(aluno)
 
-            turmas = Turma.objects.all()
-
+            instance.container = container
+            instance.save()
 
             print('Criando container...')
-            container = setup.ContainerSetup(
-                container=form.instance.container,
-                turmas=Turma.objects.all(),
-                alunos=alunos
-            )
-            container.setup()
+            ansible_manager = AnsibleManager(container=container)
+            ansible_manager.setup_container(alunos=alunos, turmas=Turma.objects.all())
         except Exception as error:
             print(error)
 
@@ -84,7 +80,47 @@ class TurmasCreateView(FormView):
 class AlunoCreateView(FormView):
     template_name = "turmas/aluno_create.html"
     form_class = AlunoForm
+
+    def form_valid(self, form):
+        try:
+            instance = form.save(commit=False)
+            turma = Turma.objects.filter(pk=self.kwargs['pk']).first()
+
+            ansible_manager = setup.AnsibleManager(container=turma.container)
+            ansible_manager.adicionar_alunos_container([instance.nome])
+
+            instance.turma = turma
+            instance.save()
+        except Exception as error:
+            print(error)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs['pk']})
+
+
+class AlunoUpdateView(UpdateView):
+    template_name = "turmas/aluno_create.html"
+    form_class = AlunoForm
+    model = Aluno
+
+    def get_object(self, queryset=None):
+        return Aluno.objects.get(pk=self.kwargs['pk_aluno'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs['pk_turma']})
+
 class TurmaDetailView(DetailView):
     template_name = "turmas/turma_detail.html"
-    context_object_name = 'turma'
-    queryset = Turma.objects
+    model = Turma
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        alunos = Aluno.objects.filter(turma=self.object)
+        context['alunos'] = alunos
+        return context
