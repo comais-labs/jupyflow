@@ -22,10 +22,29 @@
             </p>
             {{ turma.container.porta }}
         </div>
+        <div>
+            <p style="font-size: 16px;" class="arimo-bold m-0">
+                Status:
+            </p>
+            {% if turma.container.ativo %}
+                <p class="text-success">Ativo</p>
+            {% else %}
+                <p class="text-danger">Inativo</p>
+            {%  endif %}
+        </div>
         <div class="d-flex justify-content-end mt-3">
-        <a href="{% url 'turmas:aluno_criar' pk=turma.id %}"
-           style="background-color:#00897B;font-weight:bold;"
-           class="btn w-25 text-white">Adicionar Alunos</a>
+            {% if not turma.container.ativo %}
+                <form action="{% url 'turmas:subir_container' pk=turma.id %}" method="POST">
+                {% csrf_token %}
+                <input value="Subir container"
+                       style="background-color:#00897B;font-weight:bold;"
+                       class="btn text-white mx-3"
+                       type="submit">
+                </form>
+            {% endif %}
+            <a href="{% url 'turmas:aluno_criar' pk=turma.id %}"
+               style="background-color:#00897B;font-weight:bold;"
+               class="btn w-25 text-white mx-3">Adicionar Alunos</a>
         </div>
     </div>
     <div class="border rounded p-3 my-3">
@@ -42,5 +61,17 @@
                 </div>
             </div>
         {%  endfor %}
+    </div>
+    {% if not turma.container.ativo %}
+    <div class="border rounded p-3 my-3">
+        <div style="font-size:18px;" class="arimo-bold mb-3 text-danger">
+            O container não está rodando
+        </div>
+        <div style="font-size:18px;" class="arimo-bold mb-3">
+            Mensagem de erro:
+        </div>
+        {{ ansible_log|linebreaksbr }}
+    </div>
+    {% endif %}
 </div>
 {% endblock conteudo %}

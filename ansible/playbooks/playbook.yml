@@ -16,6 +16,7 @@
 
     - name: Pull 3b docker image
       command: docker pull comaisuft/jupyflow:latest
+
     - name: Create jupyterhub docker container
       command: "docker run -d -e TURMA='/{{name_container}}/' --name {{name_container}} -p {{port_extenal}}:{{port_docker}} comaisuft/jupyflow:latest"
 
@@ -38,7 +39,7 @@
 
     - name: Configura HAProxy
       template:
-        src: haproxy.cfg.j2
+        src: ../base_files/haproxy.cfg.j2
         dest: /etc/haproxy/haproxy.cfg
       notify:
         - restart haproxy

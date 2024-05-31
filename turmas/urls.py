@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from turmas.views import TurmasCreateView, TurmasIndexView, TurmaDetailView, AlunoCreateView, AlunoUpdateView
+from turmas.views import TurmasCreateView, TurmasIndexView, TurmaDetailView, AlunoCreateView, AlunoUpdateView, ContainerStartView
 
 app_name = "turmas"
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path("turmas/<int:pk>", TurmaDetailView.as_view(), name="ver"),
     path("turmas/<int:pk>/aluno/criar", AlunoCreateView.as_view(), name="aluno_criar"),
     path("turmas/<int:pk_turma>/aluno/<int:pk_aluno>/editar", AlunoUpdateView.as_view(), name="aluno_editar"),
+    path("turmas/<int:pk>/container/start", ContainerStartView.as_view(), name="subir_container"),
 ]

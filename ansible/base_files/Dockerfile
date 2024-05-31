@@ -8,6 +8,4 @@ RUN python3 -m pip install jupyter-core jupyter-server jupyterlab notebook
 
 ENV TURMA=$TURMA
 
-# RUN echo "c.JupyterHub.base_url = '$TURMA'" > /srv/jupyterhub/jupyterhub_config.py
-
 CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]

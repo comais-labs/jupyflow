@@ -1,13 +1,15 @@
+import codecs
 from typing import Any
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import FormView, UpdateView
 
-from ansible import setup
+from ansible import manager
 from google_api.api import GoogleAPI
 from turmas.forms import TurmaForm, AlunoForm
-from turmas.models import ContainerTurma, Turma, Aluno
-from ansible.setup import AnsibleManager
+from turmas.models import ContainerTurma, Turma, Aluno, UltimaPorta
+from ansible.manager import AnsibleManager
 
 class TurmasIndexView(TemplateView):
     template_name = "turmas/index.html"
@@ -68,6 +70,10 @@ class TurmasCreateView(FormView):
             instance.container = container
             instance.save()
 
+            ultima_porta = UltimaPorta.objects.first()
+            ultima_porta.ultima_porta = str(int(ultima_porta.ultima_porta) + 1)
+            ultima_porta.save()
+
             print('Criando container...')
             ansible_manager = AnsibleManager(container=container)
             ansible_manager.setup_container(alunos=alunos, turmas=Turma.objects.all())
@@ -86,7 +92,7 @@ class AlunoCreateView(FormView):
             instance = form.save(commit=False)
             turma = Turma.objects.filter(pk=self.kwargs['pk']).first()
 
-            ansible_manager = setup.AnsibleManager(container=turma.container)
+            ansible_manager = manager.AnsibleManager(container=turma.container)
             ansible_manager.adicionar_alunos_container([instance.nome])
 
             instance.turma = turma
@@ -106,7 +112,7 @@ class AlunoUpdateView(UpdateView):
     model = Aluno
 
     def get_object(self, queryset=None):
-        return Aluno.objects.get(pk=self.kwargs['pk_aluno'])
+        return Aluno.objects.filter(pk=self.kwargs['pk_aluno']).first()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -123,4 +129,20 @@ class TurmaDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         alunos = Aluno.objects.filter(turma=self.object)
         context['alunos'] = alunos
+
+        container = ContainerTurma.objects.filter(turma=self.object).first()
+        context['ansible_log'] = codecs.decode(container.ansible_log, 'unicode_escape')
         return context
+
+
+class ContainerStartView(DetailView):
+    template_name = 'turmas/container_run.html'
+    model = ContainerTurma
+
+    def post(self, request, *args, **kwargs):
+        container = ContainerTurma.objects.filter(turma=self.kwargs['pk']).first()
+        if container:
+            ansible_manager = AnsibleManager(container=container)
+            ansible_manager.run_container()
+
+        return redirect(reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs['pk']}))

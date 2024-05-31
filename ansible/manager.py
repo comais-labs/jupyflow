@@ -10,7 +10,7 @@ class AnsibleManager:
 
     def _ansible_run(self, nome_playbook: str, extra_vars: dict):
         runner = ansible_runner.run(
-            playbook=f"{BASE_DIR}/ansible/{nome_playbook}.yml",
+            playbook=f"{BASE_DIR}/ansible/playbooks/{nome_playbook}.yml",
             extravars=extra_vars,
         )
         if runner.status == 'failed':
@@ -18,7 +18,7 @@ class AnsibleManager:
                 log = ""
                 lines = output.readlines()
                 for line in lines:
-                    log += f"{line}\n\n"
+                    log += line
                 self.container.ansible_log = log
                 self.container.ativo = False
                 self.container.save()
@@ -31,8 +31,6 @@ class AnsibleManager:
         turmas_dict = []
         for turma in turmas:
             turma = model_to_dict(turma)
-            container = ContainerTurma.objects.filter(turma=turma['id']).first()
-            breakpoint()
             turma['porta'] = model_to_dict(ContainerTurma.objects.filter(turma=turma['id']).first())['porta']
             turmas_dict.append(turma)
         return turmas_dict
@@ -46,6 +44,11 @@ class AnsibleManager:
             "users": self._get_usuarios(alunos)
         }
         self._ansible_run(nome_playbook='usuario_playbook', extra_vars=extra_vars)
+
+    def run_container(self):
+        extra_vars = {"nome_container": self.container.nome_container}
+        self._ansible_run(nome_playbook='container_playbook', extra_vars=extra_vars)
+
 
     def setup_container(self, alunos: list, turmas: list):
         extra_vars = {
