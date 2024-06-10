@@ -35,7 +35,9 @@ class AnsibleManager:
             turmas_dict.append(turma)
         return turmas_dict
 
-    def _get_usuarios(self, alunos: list):
+    def _get_usuarios(self, alunos: list | dict):
+        if type(alunos) == dict:
+            return alunos
         return [{"user": aluno, "password": aluno} for aluno in alunos]
 
     def adicionar_alunos_container(self, alunos: list):
@@ -57,6 +59,8 @@ class AnsibleManager:
             "users": self._get_usuarios(alunos),
             "turmas": self._get_models_dict(turmas),
         }
+
+        breakpoint()
 
         self._ansible_run(nome_playbook='playbook', extra_vars=extra_vars)
 

@@ -1,5 +1,6 @@
 import codecs
 from typing import Any
+from django.forms.models import BaseModelForm
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
@@ -7,7 +8,7 @@ from django.views.generic.edit import FormView, UpdateView
 
 from ansible import manager
 from google_api.api import GoogleAPI
-from turmas.forms import TurmaForm, AlunoForm
+from turmas.forms import TurmaForm, AlunoForm, TurmaUpdateForm
 from turmas.models import ContainerTurma, Turma, Aluno, UltimaPorta
 from ansible.manager import AnsibleManager
 
@@ -82,6 +83,15 @@ class TurmasCreateView(FormView):
 
         return super().form_valid(form)
 
+class TurmasUpdateView(UpdateView):
+    template_name = "turmas/turma_create.html"
+    form_class = TurmaUpdateForm
+    model = Turma
+
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("turmas:ver", kwargs={"pk":self.kwargs['pk']})
+
 
 class AlunoCreateView(FormView):
     template_name = "turmas/aluno_create.html"
@@ -141,8 +151,14 @@ class ContainerStartView(DetailView):
 
     def post(self, request, *args, **kwargs):
         container = ContainerTurma.objects.filter(turma=self.kwargs['pk']).first()
+        alunos = Aluno.objects.filter(turma_id=self.kwargs['pk'])
+
+        lista_alunos = []
+        for aluno in alunos:
+            lista_alunos.append(aluno.nome)
+
         if container:
             ansible_manager = AnsibleManager(container=container)
-            ansible_manager.run_container()
+            ansible_manager.setup_container(turmas=Turma.objects.all(), alunos=lista_alunos)
 
         return redirect(reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs['pk']}))

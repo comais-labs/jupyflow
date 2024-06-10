@@ -45,6 +45,9 @@
             <a href="{% url 'turmas:aluno_criar' pk=turma.id %}"
                style="background-color:#00897B;font-weight:bold;"
                class="btn w-25 text-white mx-3">Adicionar Alunos</a>
+            <a href="{% url 'turmas:editar' pk=turma.id %}"
+               style="background-color:#00897B;font-weight:bold;"
+               class="btn w-25 text-white mx-3">Editar Turma</a>
         </div>
     </div>
     <div class="border rounded p-3 my-3">
@@ -70,7 +73,9 @@
         <div style="font-size:18px;" class="arimo-bold mb-3">
             Mensagem de erro:
         </div>
-        {{ ansible_log|linebreaksbr }}
+        <div style="background-color:#f0f0f0;" class="border rouded p-3 my-3">
+            {{ ansible_log|linebreaksbr }}
+        </div>
     </div>
     {% endif %}
 </div>
