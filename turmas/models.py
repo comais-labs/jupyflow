@@ -3,7 +3,9 @@ from django.db import models
 # Create your models here.
 def get_porta_default():
     ultima_porta = UltimaPorta.objects.first()
-    return int(ultima_porta.ultima_porta) + 1
+    if ultima_porta:
+        return int(ultima_porta.ultima_porta) + 1
+    return 8000
 
 
 class ContainerTurma(models.Model):

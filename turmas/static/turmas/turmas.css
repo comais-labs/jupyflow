@@ -1,0 +1,243 @@
+main {
+    background-color: #31363F;
+    height: 92vh;
+}
+
+.card-turma {
+    background-color: #EEEEEE;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.58);
+    display: flex;
+    gap: 1rem;
+}
+
+.turma-header {
+    flex-direction: row;
+}
+
+.top-info {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.content-container {
+    padding-top: 2rem;
+}
+
+.turma-title {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.turma-info-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.turma-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-box-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-label {
+    font-weight: bold;
+}
+
+.information-container {
+    padding-inline: 2rem;
+    padding-block: 1rem;
+    border-radius: 8px;
+}
+
+.simple-info-bg {
+    background-color: #b3bcc9;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #222831;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #4b5159;
+}
+
+.turma-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 25vh;
+}
+
+.turma-descricao {
+    font-size: 12px;
+    color: #5b5f63;
+}
+
+.turma-created-at {
+    font-size: 12px;
+    color: #5b5f63;
+    align-self: flex-end;
+}
+
+.header-button {
+    width: 100%;
+    color: white;
+    text-decoration: none;
+    background-color: #00897B;
+    border: none;
+    padding-block: 0.25rem;
+    padding-inline: 1rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 200ms;
+}
+
+.header-button:hover {
+    color: white;
+    background-color: #36a398;
+    transform: scale(1.0125);
+}
+
+.header-light-button {
+    width: 100%;
+    color: #00897B;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    border: 2px solid #00897B;
+    padding-block: 0.25rem;
+    padding-inline: 1rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 200ms;
+}
+
+.header-light-button:hover {
+    color: #00897B;
+    transform: scale(1.0125);
+}
+
+.card-turma-title {
+    color: #222831;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.turmas-list-title {
+    font-size: 24px;
+    color: #EEEEEE
+}
+
+.turmas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.turma-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.container-status {
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    width: 10%;
+}
+
+.active {
+    background-color: #daf0db;
+}
+
+.inactive {
+    background-color: #f0dada;
+}
+
+.card-turma-subtitle {
+    font-size: 14px;
+}
+
+.view-button {
+    background-color: #222831;
+    padding-inline: 2rem;
+    padding-block: 0.5rem;
+    border-radius: 50px;
+}
+
+.view-button:hover {
+    background-color: #353e4d;
+}
+
+.view-button a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
+.view-button a:hover {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
+.card-content-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1rem;
+}
+
+.turmas-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.create-button {
+    background-color: #00897B;
+    color: #EEEEEE;
+    padding-inline: 2rem;
+    padding-block: 0.5rem;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: 100ms;
+}
+
+.create-button:hover {
+    background-color: #09ad9d;
+    text-decoration: none;
+    color: #EEEEEE;
+}

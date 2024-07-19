@@ -1,44 +1,54 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block titulo %} - Página Inicial{% endblock titulo %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/turmas.css' %}"> {% endblock extra_css %}
 {% block conteudo %}
-<div class="content-container mt-3">
+<div class="content-container">
 	<div class="container">
-		<div class="d-flex justify-content-end">
-			<a  style="background-color:#00897B;"
-				class="border rounded px-3 py-2 text-white" 
-				href="{% url 'turmas:criar' %}">Criar nova turma</a>
+		<div class="turmas-title-container">
+			<div class="turmas-list-title arimo-bold">
+				Lista de Turmas
+			</div>
+			<div class="d-flex justify-content-end">
+				<a class="create-button"
+					href="{% url 'turmas:criar' %}">Criar nova turma</a>
+			</div>
 		</div>
-
-		<div class="mb-2 turmas-list-title arimo-bold">
-			Turmas
-		</div>
-		{% for turma in turmas %}
-		<div class="flex-column row border rounded p-3 my-3">
-			<div class="d-flex justify-content-between">
-				<div>
-					{{ turma }} - {{ turma.container.nome_container }}
-				</div>
+		<div class="turmas-container">
+			{% for turma in turmas %}
+			<div class="card-turma">
 				{% if not turma.container.ativo %}
-				<div 
-					style="background-color:#f0dada;width:10%;" 
-					class="d-flex justify-content-center border rounded border-danger py-1 text-danger">
+				<div class="container-status inactive">
 					Inativo
 				</div>
 				{% else %}
-				<div 
-					style="background-color:#daf0db;width:10%;" 
-					class="d-flex justify-content-center border rounded border-success py-1 text-success">
-					Rodando 
+				<div class="container-status active">
+					Ativo
 				</div>
 				{% endif %}
+				<div class="card-content-container">
+					<div>
+						<div class="card-turma-title">
+							Turma: {{ turma.nome_turma }}
+						</div>
+						<div class="card-turma-subtitle">
+							Curso: {{ turma.nome_curso }}
+						</div>
+						<div class="card-turma-subtitle">
+							Container: {{ turma.container.nome_container }}
+						</div>
+					</div>
+					<div class="view-button">
+						<a href="{% url 'turmas:ver' turma.pk %}">Ver mais</a>
+					</div>
+				</div>
+
 			</div>
-			<div class="d-flex px-4 py-2 justify-content-end">
-				<a href="{% url 'turmas:ver' turma.pk %}"> Ver mais</a>
-			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}  
+
 	</div>
 </div>
 {% endblock conteudo %}
-

@@ -1,0 +1,12 @@
+- name: Verifica saúde dos containers
+  hosts: jupyflow
+
+  tasks:
+    - name: Inspect jupyterhub docker container
+      command: "docker container inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' {{ item }}"
+      register: "status_list"
+      loop:
+        "{{ containers }}"
+
+    - debug: msg="{{item}}"
+      with_items: "{{status_list.results}}"
