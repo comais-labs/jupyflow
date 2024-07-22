@@ -3,115 +3,122 @@
 
 {% block titulo %} - Teste {% endblock titulo %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'turmas/turmas.css' %}">{% endblock extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/turmas.css' %}">
+{% endblock extra_css %}
 
 {% block conteudo %}
-<div class="container content-container">
-    <div class="card-turma turma-header">
-        <div class="turma-info-container">
-            <div class="turma-title">
-                <p class="title">
-                    Turma {{ turma.nome_turma }}
-                </p>
-                <p class="subtitle">
-                    • Curso {{ turma.nome_curso }}
-                </p>
-            </div>
-            <div class="turma-info">
-                <div class="turma-description">
-                    <div class="turma-descricao">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore
-                        et dolore magna aliqua. Ut enim ad minim veniam
-                    </div>
-                    <div class="turma-created-at">
-                        Criada em 19/07/2024
-                    </div>
+<div class="container main-container">
+    <div class="content-container">
+        <div class="card-turma turma-header">
+            <div class="turma-info-container">
+                <div class="turma-title">
+                    <p class="title">
+                        Turma {{ turma.nome_turma }}
+                    </p>
+                    <p class="subtitle">
+                        • Curso {{ turma.nome_curso }}
+                    </p>
                 </div>
-                <div class="turma-buttons-container">
-                    <a href="{% url 'turmas:editar' pk=turma.id %}" class="header-button">Editar
-                        Turma
-                    </a>
-                    <a href="{% url 'turmas:aluno_criar' pk=turma.id %}" class="header-button">Adicionar Alunos</a>
-                    <form action="{% url 'turmas:subir_container' pk=turma.id %}" method="POST">
-                        {% csrf_token %}
-                        <input value="Reiniciar container" class="header-light-button" type="submit">
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="info-box-container">
-            <div class="top-info">
-                <div class="information-container simple-info-bg">
-                    <div class="info-label">
-                        Nome do Container
+                <div class="turma-info">
+                    <div class="turma-description">
+                        <div class="turma-descricao">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore
+                            et dolore magna aliqua. Ut enim ad minim veniam
+                        </div>
+                        <div class="turma-created-at">
+                            Criada em 19/07/2024
+                        </div>
                     </div>
-                    <div class="info">
-                        {{ turma.container.nome_container }}
-                    </div>
-                </div>
-                <div class="information-container simple-info-bg">
-                    <div class="info-label">
-                        Porta
-                    </div>
-                    <div class="info">
-                        {{ turma.container.porta }}
+                    <div class="turma-buttons-container">
+                        <a href="{% url 'turmas:editar' pk=turma.id %}" class="header-button">Editar
+                            Turma
+                        </a>
+                        <a href="{% url 'turmas:aluno_criar' pk=turma.id %}" class="header-button">Adicionar Alunos</a>
+                        <form action="{% url 'turmas:subir_container' pk=turma.id %}" method="POST">
+                            {% csrf_token %}
+                            <input value="Reiniciar container" class="header-light-button" type="submit">
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="bottom-info">
-                {% if turma.container.ativo %}
-                <div class="information-container active">
-                    <div class="info-label">
-                        Status
+            <div class="info-box-container">
+                <div class="top-info">
+                    <div class="information-container simple-info-bg">
+                        <div class="info-label">
+                            Nome do Container
+                        </div>
+                        <div class="info">
+                            {{ turma.container.nome_container }}
+                        </div>
                     </div>
-                    <div class="info">
-                        Ativo
+                    <div class="information-container simple-info-bg">
+                        <div class="info-label">
+                            Porta
+                        </div>
+                        <div class="info">
+                            {{ turma.container.porta }}
+                        </div>
                     </div>
                 </div>
-                {% else %}
-                <div class="information-container inactive">
-                    <div class="info-label">
-                        Status
+                <div class="bottom-info">
+                    {% if turma.container.ativo %}
+                    <div class="information-container active">
+                        <div class="info-label">
+                            Status
+                        </div>
+                        <div class="info">
+                            Ativo
+                        </div>
                     </div>
-                    <div class="info">
-                        Inativo
+                    {% else %}
+                    <div class="information-container inactive">
+                        <div class="info-label">
+                            Status
+                        </div>
+                        <div class="info">
+                            Inativo
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
 
+            </div>
         </div>
-    </div>
 
-</div>
-<div class="container card-turma">
-    <div style="font-size:18px;" class="arimo-bold mb-3">
-        Alunos
     </div>
-    {% for aluno in alunos %}
-    <div class="d-flex justify-content-between">
-        <div>
-            {{ aluno.nome }}
+    <div class="card-turma alunos-container">
+        <div style="font-size:18px;" class="arimo-bold">
+            Alunos
         </div>
-        <div class="">
-            <a href="{% url 'turmas:aluno_editar' pk_turma=turma.id pk_aluno=aluno.id %}">Editar</a>
+        <div class="alunos-list">
+            {% for aluno in alunos %}
+            <div class="aluno-card">
+                <div class="aluno-info">
+                    <i class="fa-solid fa-user"></i>
+                    {{ aluno.nome }}
+                </div>
+                <div class="aluno-button edit-button">
+                    <a href="{% url 'turmas:aluno_editar' pk_turma=turma.id pk_aluno=aluno.id %}"><i
+                            class="fa-solid fa-pen"></i></a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-</div>
-{% if not turma.container.ativo %}
-<div class="border rounded p-3 my-3">
-    <div style="font-size:18px;" class="arimo-bold mb-3 text-danger">
-        O container não está rodando
+    {% if not turma.container.ativo %}
+    <div class="border rounded p-3 my-3">
+        <div style="font-size:18px;" class="arimo-bold mb-3 text-danger">
+            O container não está rodando
+        </div>
+        <div style="font-size:18px;" class="arimo-bold mb-3">
+            Mensagem de erro:
+        </div>
+        <div style="background-color:#f0f0f0;" class="border rouded p-3 my-3">
+            {{ ansible_log|linebreaksbr }}
+        </div>
     </div>
-    <div style="font-size:18px;" class="arimo-bold mb-3">
-        Mensagem de erro:
-    </div>
-    <div style="background-color:#f0f0f0;" class="border rouded p-3 my-3">
-        {{ ansible_log|linebreaksbr }}
-    </div>
+    {% endif %}
 </div>
-{% endif %}
-</div>
+<script src="https://kit.fontawesome.com/d00ebd3d85.js" crossorigin="anonymous"></script>
 {% endblock conteudo %}

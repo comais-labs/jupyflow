@@ -26,22 +26,37 @@ class TurmaForm(forms.ModelForm):
 
         FORMULARIOS = formularios
 
+        self.fields["nome_curso"].widget = forms.TextInput(
+            attrs={"class": "form-field"}
+        )
+
+        self.fields["nome_turma"].widget = forms.TextInput(
+            attrs={"class": "form-field"}
+        )
+
         self.fields["nome_container"] = forms.CharField(
-            label="Nome do container", max_length=20, required=True
+            label="Nome do container",
+            max_length=20,
+            required=True,
+            widget=forms.TextInput(attrs={"class": "form-field"}),
         )
         self.fields["lista_alunos"] = forms.CharField(
-            label="Lista de alunos", required=False
+            label="Lista de alunos",
+            required=False,
+            widget=forms.TextInput(attrs={"class": "form-field"}),
         )
         self.fields["formulario"] = forms.ChoiceField(
             label="Formulários",
             choices=FORMULARIOS,
-            widget=forms.Select(),
+            widget=forms.Select(attrs={"class": "form-select"}),
             required=False,
         )
         self.fields["porta"] = forms.CharField(
             label="Porta do container",
             required=False,
-            widget=forms.TextInput(attrs={"placeholder": get_porta_default()}),
+            widget=forms.TextInput(
+                attrs={"class": "form-field", "placeholder": get_porta_default()}
+            ),
         )
 
     def clean(self):
@@ -89,15 +104,18 @@ class TurmaUpdateForm(TurmaForm):
     def __init__(self, *args, **kwargs):
         super(TurmaUpdateForm, self).__init__(*args, **kwargs)
 
-
         self.fields["nome_container"] = forms.CharField(
             label="Nome do container",
             max_length=20,
             required=True,
             initial=self.instance.container.nome_container,
+            widget=forms.TextInput(attrs={"class": "form-field"}),
         )
         self.fields["porta"] = forms.CharField(
-            label="Porta do container", required=False, initial=self.instance.container.porta
+            label="Porta do container",
+            required=False,
+            initial=self.instance.container.porta,
+            widget=forms.TextInput(attrs={"class": "form-field"}),
         )
 
 
@@ -105,6 +123,11 @@ class AlunoForm(forms.ModelForm):
     class Meta:
         model = Aluno
         exclude = ["turma"]
+
+    def __init__(self, *args, **kwargs):
+        super(AlunoForm, self).__init__(*args, **kwargs)
+        self.fields["nome"].widget = forms.TextInput(attrs={"class": "form-field"})
+        self.fields["senha"].widget = forms.TextInput(attrs={"class": "form-field"})
 
 
 class AlunoCreateForm(AlunoForm):

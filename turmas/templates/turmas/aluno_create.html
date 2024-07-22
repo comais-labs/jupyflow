@@ -1,30 +1,38 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block titulo %} - Teste {% endblock titulo %}
 
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/form.css' %}">
+{% endblock extra_css %}
+
 {% block conteudo %}
-    <div class="container mt-3">
+<div class="container">
+    <div class="content-container">
         <form method="POST">
             {% csrf_token %}
-            <div class="border rounded p-3">
-                <div class="m-3 arimo-bold">
+            <div class="form-container">
+                <div class="form-title">
                     Criar aluno
                 </div>
-                <div class="row mx-2 flex-column">
-                    {{ form.nome.label }}:
-                    {{ form.nome }}
-                </div>
-                <div class="row mx-2 mt-3 flex-column">
-                    {{ form.senha.label }}:
-                    {{ form.senha }}
-                </div>
-                <div class="d-flex justify-content-end my-3">
-                    <input type="submit"
-                           style="background-color:#00897B;font-weight:bold;"
-                           class="btn w-25 text-white"
-                           value="Criar usuário no container">
+                <div class="text-fields-container">
+                    <div class="form-field-container">
+                        <p class="form-label">{{ form.nome.label }}:</p>
+                        {{ form.nome }}
+                    </div>
+                    <div class="form-field-container">
+                        <p class="form-label">{{ form.senha.label }}:</p>
+                        {{ form.senha }}
+                    </div>
+                    <div class="d-flex justify-content-end my-3">
+                        <input type="submit" style="background-color:#00897B;font-weight:bold;"
+                            class="btn w-25 text-white" value="Criar usuário no container">
+                    </div>
                 </div>
             </div>
         </form>
     </div>
+</div>
 {% endblock conteudo %}

@@ -1,6 +1,6 @@
-main {
-    background-color: #31363F;
-    height: 92vh;
+html, main {
+    background: #31363F;
+    height: 100%;
 }
 
 .card-turma {
@@ -241,3 +241,60 @@ main {
     text-decoration: none;
     color: #EEEEEE;
 }
+
+.alunos-container {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 1rem;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+
+.alunos-list {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: auto auto auto;
+}
+
+.aluno-card {
+    padding: 1rem;
+    background-color: #b3bcc9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.aluno-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.edit-button {
+    background-color: #222831;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    border-radius: 50px;
+}
+
+.edit-button:hover {
+    background-color: #353e4d;
+}
+
+.edit-button a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
+.edit-button a:hover {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
