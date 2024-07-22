@@ -1,0 +1,13 @@
+- name: Adiciona usuário ao container
+  hosts: jupyflow
+  vars:
+    nome_container: "{{ nome_container }}"
+
+  tasks:
+    - name: Adicionar usuário no container
+      community.docker.docker_container_exec:
+        container: "{{nome_container}}"
+        command: /bin/bash -c 'useradd  -s /bin/bash -m -r -p $(openssl passwd -1 {{item.password}}) {{item.user}}'
+        chdir: /root
+      loop:
+        "{{ users }}"

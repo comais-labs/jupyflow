@@ -1,6 +1,139 @@
+{% extends 'base/base.html' %}
+{% load static %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit">
-</form>
+{% block titulo %} - Criar Turma{% endblock titulo %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/form.css' %}">
+{% endblock extra_css %}
+{% block conteudo %}
+<div class="container content-container">
+	<div class="form-container">
+		<form method="POST">
+			{% csrf_token %}
+			<div style="font-size:24px;" class="arimo-bold">
+				Criar turma
+			</div>
+			<div class="text-fields-container">
+				<div class="form-field-container">
+					<b>{{ form.nome_curso.label }}:</b>
+					{{ form.nome_curso }}
+					{% if form.nome_curso.errors %}
+					<ul class="">
+						{% for error in form.nome_curso.errors %}
+						<li class="text-danger">{{error}}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+
+				<div class="form-field-container">
+					<b>{{ form.nome_turma.label }}:</b>
+					{{ form.nome_turma }}
+					{% if form.nome_turma.errors %}
+					<ul class="">
+						{% for error in form.nome_turma.errors %}
+						<li class="text-danger">{{error}}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+
+				<div class="form-field-container">
+					<b>{{ form.nome_container.label }}:</b>
+					{{ form.nome_container }}
+					{% if form.nome_container.errors %}
+					<ul class="">
+						{% for error in form.nome_container.errors %}
+						<li class="text-danger">{{error}}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+
+				<div class="form-field-container">
+					<b>{{ form.porta.label }}:</b>
+					{{ form.porta }}
+					{% if form.porta.errors %}
+					<ul class="">
+						{% for error in form.porta.errors %}
+						<li class="text-danger">{{error}}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+			</div>
+
+
+
+			<div class="form-field-container">
+				<select id="tipo_lista" class="form-select">
+					<option value="none">Selecionar...</option>
+					<option value="lista_alunos">Inserir manualmente</option>
+					<option value="formulario">Selecionar formulário</option>
+				</select>
+			</div>
+
+			<div id="lista_alunos" style="display:none;" class="hidden-field-container form-field-container">
+				<b>{{ form.lista_alunos.label }}:</b>
+				{{ form.lista_alunos }}
+				{% if form.lista_alunos.errors %}
+				<ul class="m-0 mt-2">
+					{% for error in form.lista_alunos.errors %}
+					<li class="text-danger">{{error}}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			</div>
+
+			<div id="formulario" style="display:none;" class="hidden-field-container">
+				<b>{{ form.formulario.label }}:</b>
+				{{ form.formulario }}
+				{% if form.formulario.errors %}
+				<ul class="m-0 mt-2">
+					{% for error in form.formulario.errors %}
+					<li class="text-danger">{{error}}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			</div>
+
+			<div class="">
+				<input style="background-color:#00897B;font-weight:bold;" class="btn w-25 text-white" type="submit"
+					value="Criar turma">
+			</div>
+		</form>
+	</div>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+		const select = document.getElementById('tipo_lista');
+
+		select.addEventListener('change', function handleChange(event) {
+			if (event.target.value == 'none') {
+				if ($('#formulario').css('display') != 'none') {
+					$('#formulario').hide();
+				}
+				if ($('#lista_alunos').css('display') != 'none') {
+					$('#lista_alunos').hide();
+				}
+			}
+
+			if (event.target.value == 'formulario') {
+				if ($('#lista_alunos').css('display') != 'none') {
+					$('#lista_alunos').hide();
+				}
+				$('#formulario').show();
+			}
+
+			if (event.target.value == 'lista_alunos') {
+				if ($('#formulario').css('display') != 'none') {
+					$('#formulario').hide();
+				}
+				$('#lista_alunos').show();
+			}
+		})
+	})
+</script>
+{% endblock conteudo %}

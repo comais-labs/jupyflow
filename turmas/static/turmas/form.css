@@ -1,0 +1,53 @@
+main {
+    background-color: #31363F;
+    height: 92vh;
+}
+
+.form-container {
+    background-color: #EEEEEE;
+    padding: 1rem;
+    border-radius: 16px;
+}
+
+.content-container {
+    padding-top: 3rem;
+}
+
+.form-field-container {
+    display: flex;
+    flex-direction: column;
+    margin-block: 0.5rem;
+    color: #222831;
+}
+
+.text-fields-container {
+    margin-block: 1rem;
+}
+
+.form-field {
+    padding-inline: 15px;
+    border: none;
+    border-radius: 8px;
+    height: 2.5rem;
+}
+
+.form-select {
+    padding-inline: 15px;
+    border: none;
+    border-radius: 8px;
+    height: 2.5rem;
+}
+
+.hidden-field-container {
+    margin-block: 1rem;
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222831;
+}
+
+.form-label {
+    font-weight: bold;
+}

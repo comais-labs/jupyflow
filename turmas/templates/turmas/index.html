@@ -1,5 +1,54 @@
-{% for turma in turmas %}
-    {{ turma }}
-    {{ turma.container.ativo }}
-    <br> {{ turma.container.ansible_log }}
-{% endfor %}
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block titulo %} - Página Inicial{% endblock titulo %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/turmas.css' %}"> {% endblock extra_css %}
+{% block conteudo %}
+<div class="content-container">
+	<div class="container">
+		<div class="turmas-title-container">
+			<div class="turmas-list-title arimo-bold">
+				Lista de Turmas
+			</div>
+			<div class="d-flex justify-content-end">
+				<a class="create-button"
+					href="{% url 'turmas:criar' %}">Criar nova turma</a>
+			</div>
+		</div>
+		<div class="turmas-container">
+			{% for turma in turmas %}
+			<div class="card-turma">
+				{% if not turma.container.ativo %}
+				<div class="container-status inactive">
+					Inativo
+				</div>
+				{% else %}
+				<div class="container-status active">
+					Ativo
+				</div>
+				{% endif %}
+				<div class="card-content-container">
+					<div>
+						<div class="card-turma-title">
+							Turma: {{ turma.nome_turma }}
+						</div>
+						<div class="card-turma-subtitle">
+							Curso: {{ turma.nome_curso }}
+						</div>
+						<div class="card-turma-subtitle">
+							Container: {{ turma.container.nome_container }}
+						</div>
+					</div>
+					<div class="view-button">
+						<a href="{% url 'turmas:ver' turma.pk %}">Ver mais</a>
+					</div>
+				</div>
+
+			</div>
+			{% endfor %}
+		</div>
+
+	</div>
+</div>
+{% endblock conteudo %}
