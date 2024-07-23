@@ -9,7 +9,7 @@ from django.db import transaction
 
 from ansible import manager
 from google_api.api import GoogleAPI
-from turmas.forms import TurmaForm, AlunoForm, TurmaUpdateForm
+from turmas.forms import DocumentoCreateForm, TurmaForm, AlunoForm, TurmaUpdateForm
 from turmas.models import ContainerTurma, Turma, Aluno, UltimaPorta
 from ansible.manager import AnsibleManager
 
@@ -195,3 +195,20 @@ def turma_delete_view(request, pk):
             ContainerTurma.objects.filter(pk=container.pk).delete()
 
         return redirect(reverse_lazy("turmas:index"))
+
+
+class PostarDocumentoView(FormView):
+    template_name = "turmas/documento_create.html"
+    form_class = DocumentoCreateForm
+
+    @transaction.atomic
+    def form_valid(self, form):
+        form.instance.turma = Turma.objects.filter(id=self.kwargs["pk"]).first()
+        form.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs["pk"]})

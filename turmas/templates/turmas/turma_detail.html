@@ -32,6 +32,8 @@
                         <a href="{% url 'turmas:editar' pk=turma.id %}" class="header-button">Editar
                             Turma
                         </a>
+                        <a href="{% url 'turmas:postar_documento' pk=turma.id %}" class="header-button">Postar
+                            Documento</a>
                         <a href="{% url 'turmas:aluno_criar' pk=turma.id %}" class="header-button">Adicionar
                             Alunos</a>
                         <form action="{% url 'turmas:subir_container' pk=turma.id %}" method="POST">

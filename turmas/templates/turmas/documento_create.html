@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block titulo %} - Teste {% endblock titulo %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'turmas/form.css' %}">
+{% endblock extra_css %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="content-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-container">
+                <div class="form-title">
+                    Criar aluno
+                </div>
+                <div class="text-fields-container">
+                    <div class="form-field-container">
+                        <p class="form-label">{{ form.nome.label }}:</p>
+                        {{ form.nome }}
+                    </div>
+                    <div class="form-field-container">
+                        <p class="form-label">{{ form.documento.label }}:</p>
+                        {{ form.documento }}
+                    </div>
+                    <div class="d-flex justify-content-end my-3">
+                        <input type="submit" style="background-color:#00897B;font-weight:bold;"
+                            class="btn w-25 text-white" value="Postar Documento">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock conteudo %}
