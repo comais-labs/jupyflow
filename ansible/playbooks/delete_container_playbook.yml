@@ -1,0 +1,11 @@
+- name: Deleta container existente
+  hosts: jupyflow
+  vars:
+    nome_container: "{{ nome_container }}"
+
+  tasks:
+    - name: Stop running jupyterhub docker container
+      command: "docker stop {{ nome_container }}"
+
+    - name: Remove jupyterhub docker container
+      command: "docker rm {{ nome_container }}"

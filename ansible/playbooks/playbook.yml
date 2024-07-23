@@ -3,7 +3,7 @@
   hosts: jupyflow
   vars:
     port_extenal: "{{ port_external }}"
-    port_docker: 8003
+    port_docker: 8000
     name_container: "{{ tag_container }}"
   become: yes
 
@@ -27,6 +27,7 @@
        chdir: /root
       loop:
         "{{ users }}"
+      ignore_errors: true
 
     - name: Atualizar PATH
       community.docker.docker_container_exec:

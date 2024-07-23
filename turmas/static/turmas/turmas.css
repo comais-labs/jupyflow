@@ -1,4 +1,5 @@
-html, main {
+html,
+main {
     background: #31363F;
     height: 100%;
 }
@@ -13,12 +14,12 @@ html, main {
 }
 
 .turma-header {
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .top-info {
     display: flex;
-    flex-direction: column;
     height: 100%;
     justify-content: space-between;
     gap: 1rem;
@@ -28,18 +29,11 @@ html, main {
     padding-top: 2rem;
 }
 
-.turma-title {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-}
-
 .turma-info-container {
     display: flex;
     align-items: stretch;
     flex-direction: column;
     width: 100%;
-    height: 100%;
 }
 
 .turma-description {
@@ -68,7 +62,7 @@ html, main {
 }
 
 .title {
-    font-size: 18px;
+    font-size: 32px;
     font-weight: bold;
     margin-bottom: 0px;
     color: #222831;
@@ -85,7 +79,31 @@ html, main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 25vh;
+}
+
+.turma-top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.turma-link-button {
+    background-color: #F79256;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    color: #EEEEEE;
+    transition: 200ms;
+}
+
+.turma-link-button:hover {
+    color: #EEEEEE;
+    background-color: #FF9E66;
+
 }
 
 .turma-descricao {
@@ -298,3 +316,29 @@ html, main {
     color: #EEEEEE;
 }
 
+.card-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 30%;
+}
+
+.button-type-style {
+    border: none;
+    color: #EEEEEE
+}
+
+.top-card-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.fill {
+    width: 100%;
+}
+
+
+.fill-less {
+    width: 30%;
+}

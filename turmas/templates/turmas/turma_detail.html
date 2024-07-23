@@ -9,84 +9,88 @@
 {% block conteudo %}
 <div class="container main-container">
     <div class="content-container">
-        <div class="card-turma turma-header">
-            <div class="turma-info-container">
-                <div class="turma-title">
-                    <p class="title">
-                        Turma {{ turma.nome_turma }}
-                    </p>
-                    <p class="subtitle">
-                        • Curso {{ turma.nome_curso }}
-                    </p>
+        <div class="top-card-container">
+            <div class="card-turma turma-header fill">
+                <div class="turma-top">
+                    <div class="turma-title">
+                        <p class="title">
+                            Turma {{ turma.nome_turma }}
+                        </p>
+                        <p class="subtitle">
+                            Curso {{ turma.nome_curso }}
+                        </p>
+                    </div>
+                    <div class="turma-link">
+                        <a href="http://192.168.105.8:{{turma.container.porta}}/{{turma.container.nome_container}}"
+                            target="_blank" class="turma-link-button"><i class="fas fa-globe"></i> Link para a
+                            turma</a>
+                    </div>
                 </div>
                 <div class="turma-info">
-                    <div class="turma-description">
-                        <div class="turma-descricao">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et dolore magna aliqua. Ut enim ad minim veniam
-                        </div>
-                        <div class="turma-created-at">
-                            Criada em 19/07/2024
-                        </div>
-                    </div>
+
                     <div class="turma-buttons-container">
                         <a href="{% url 'turmas:editar' pk=turma.id %}" class="header-button">Editar
                             Turma
                         </a>
-                        <a href="{% url 'turmas:aluno_criar' pk=turma.id %}" class="header-button">Adicionar Alunos</a>
+                        <a href="{% url 'turmas:aluno_criar' pk=turma.id %}" class="header-button">Adicionar
+                            Alunos</a>
                         <form action="{% url 'turmas:subir_container' pk=turma.id %}" method="POST">
                             {% csrf_token %}
                             <input value="Reiniciar container" class="header-light-button" type="submit">
                         </form>
                     </div>
                 </div>
-            </div>
-            <div class="info-box-container">
-                <div class="top-info">
-                    <div class="information-container simple-info-bg">
-                        <div class="info-label">
-                            Nome do Container
-                        </div>
-                        <div class="info">
-                            {{ turma.container.nome_container }}
-                        </div>
-                    </div>
-                    <div class="information-container simple-info-bg">
-                        <div class="info-label">
-                            Porta
-                        </div>
-                        <div class="info">
-                            {{ turma.container.porta }}
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-info">
-                    {% if turma.container.ativo %}
-                    <div class="information-container active">
-                        <div class="info-label">
-                            Status
-                        </div>
-                        <div class="info">
-                            Ativo
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="information-container inactive">
-                        <div class="info-label">
-                            Status
-                        </div>
-                        <div class="info">
-                            Inativo
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
 
+            </div>
+            <div class="card-turma fill-less">
+                <div class="info-box-container">
+                    <div class="top-info">
+                        <div class="information-container simple-info-bg">
+                            <div class="info-label">
+                                Nome do Container
+                            </div>
+                            <div class="info">
+                                {{ turma.container.nome_container }}
+                            </div>
+                        </div>
+                        <div class="information-container simple-info-bg">
+                            <div class="info-label">
+                                Porta
+                            </div>
+                            <div class="info">
+                                {{ turma.container.porta }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        {% if turma.container.ativo %}
+                        <div class="information-container active">
+                            <div class="info-label">
+                                Status
+                            </div>
+                            <div class="info">
+                                Ativo
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="information-container inactive">
+                            <div class="info-label">
+                                Status
+                            </div>
+                            <div class="info">
+                                Inativo
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+
+                </div>
             </div>
         </div>
-
     </div>
+
     <div class="card-turma alunos-container">
         <div style="font-size:18px;" class="arimo-bold">
             Alunos

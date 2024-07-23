@@ -18,9 +18,9 @@
 					<b>{{ form.nome_curso.label }}:</b>
 					{{ form.nome_curso }}
 					{% if form.nome_curso.errors %}
-					<ul class="">
+					<ul class="error-field">
 						{% for error in form.nome_curso.errors %}
-						<li class="text-danger">{{error}}</li>
+						<li class="error-message">{{error}}</li>
 						{% endfor %}
 					</ul>
 					{% endif %}
@@ -30,9 +30,9 @@
 					<b>{{ form.nome_turma.label }}:</b>
 					{{ form.nome_turma }}
 					{% if form.nome_turma.errors %}
-					<ul class="">
+					<ul class="error-field">
 						{% for error in form.nome_turma.errors %}
-						<li class="text-danger">{{error}}</li>
+						<li class="error-message">{{error}}</li>
 						{% endfor %}
 					</ul>
 					{% endif %}
@@ -42,9 +42,9 @@
 					<b>{{ form.nome_container.label }}:</b>
 					{{ form.nome_container }}
 					{% if form.nome_container.errors %}
-					<ul class="">
+					<ul class="error-field">
 						{% for error in form.nome_container.errors %}
-						<li class="text-danger">{{error}}</li>
+						<li class="error-message">{{error}}</li>
 						{% endfor %}
 					</ul>
 					{% endif %}
@@ -54,9 +54,9 @@
 					<b>{{ form.porta.label }}:</b>
 					{{ form.porta }}
 					{% if form.porta.errors %}
-					<ul class="">
+					<ul class="error-field">
 						{% for error in form.porta.errors %}
-						<li class="text-danger">{{error}}</li>
+						<li class="error-message">{{error}}</li>
 						{% endfor %}
 					</ul>
 					{% endif %}

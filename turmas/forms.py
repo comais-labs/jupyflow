@@ -82,12 +82,24 @@ class TurmaForm(forms.ModelForm):
                 "nome_container", "Não podem haver espaços no nome do container"
             )
 
+        nome_existe = ContainerTurma.objects.filter(nome_container=nome_container).first()
+        if nome_existe:
+            self.add_error(
+                "nome_container", "Já existe um container com este nome"
+            )
+
         return nome_container
 
     def clean_porta(self):
         porta = self.cleaned_data.get("porta")
         if not porta:
             porta = get_porta_default()
+
+        porta_existe = ContainerTurma.objects.filter(porta=porta).first()
+        if porta_existe:
+            self.add_error(
+                "porta", "Já existe um container com esta porta"
+            )
 
         return porta
 

@@ -9,6 +9,7 @@ from turmas.views import (
     AlunoUpdateView,
     ContainerStartView,
     TurmasUpdateView,
+    turma_delete_view,
 )
 
 app_name = "turmas"
@@ -18,6 +19,7 @@ urlpatterns = [
     path("turmas/criar", login_required(TurmasCreateView.as_view()), name="criar"),
     path("turmas/<int:pk>",  login_required(TurmaDetailView.as_view()), name="ver"),
     path("turmas/<int:pk>/editar",  login_required(TurmasUpdateView.as_view()), name="editar"),
+    path("turmas/<int:pk>/deletar",  login_required(turma_delete_view), name="deletar"),
     path("turmas/<int:pk>/aluno/criar",  login_required(AlunoCreateView.as_view()), name="aluno_criar"),
     path(
         "turmas/<int:pk_turma>/aluno/<int:pk_aluno>/editar",

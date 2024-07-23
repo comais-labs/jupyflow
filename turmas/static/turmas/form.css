@@ -51,3 +51,11 @@ main {
 .form-label {
     font-weight: bold;
 }
+
+.error-field {
+    margin-block: 0.5rem;
+}
+
+.error-message {
+    color: #DC2323;
+}
