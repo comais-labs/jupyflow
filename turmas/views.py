@@ -1,3 +1,4 @@
+from base64 import decodebytes
 import codecs
 from typing import Any
 from django.forms.models import BaseModelForm
@@ -6,12 +7,15 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import FormView, UpdateView
 from django.db import transaction
+import paramiko
 
 from ansible import manager
+from base.settings import BASE_DIR
 from google_api.api import GoogleAPI
 from turmas.forms import DocumentoCreateForm, TurmaForm, AlunoForm, TurmaUpdateForm
 from turmas.models import ContainerTurma, Turma, Aluno, UltimaPorta
 from ansible.manager import AnsibleManager
+from turmas.utils import upload_file_to_server
 
 
 class TurmasIndexView(TemplateView):
@@ -203,12 +207,31 @@ class PostarDocumentoView(FormView):
 
     @transaction.atomic
     def form_valid(self, form):
-        form.instance.turma = Turma.objects.filter(id=self.kwargs["pk"]).first()
+        turma = Turma.objects.filter(id=self.kwargs["pk"]).first()
+        if turma:
+            form.instance.turma = turma
         form.save()
-        return super().form_valid(form)
 
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+        path_documento = f"{str(BASE_DIR)}/{form.instance.documento.name}"
+        nome_documento = path_documento.split("/")[-1]
+        alunos_nome = [
+            str(aluno)
+            for aluno in Aluno.objects.filter(turma=turma).values_list(
+                "nome", flat=True
+            )
+        ]
+        nome_container = turma.container.nome_container
+        upload_file_to_server(file_path=path_documento, document_name=nome_documento)
+
+        ansible_manager = AnsibleManager()
+        ansible_manager.upload_file_container(
+            nome_container=nome_container,
+            nome_documento=nome_documento,
+            alunos=alunos_nome,
+            path_documento=path_documento,
+        )
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs["pk"]})

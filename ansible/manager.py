@@ -16,21 +16,7 @@ class AnsibleManager:
         )
 
         if runner.status == "failed":
-            with runner.stdout as output:
-                log = ""
-                lines = output.readlines()
-                for line in lines:
-                    log += line
-                self.container.ansible_log = log
-                self.container.ativo = False
-                self.container.save()
-            raise Exception(
-                f"{runner.status}: Não foi possível subir o container da turma."
-            )
-        else:
-            ...
-            # self.container.ativo = True
-            # self.container.save()
+            raise Exception(f"{runner.status}: Não foi possível executar playbook.")
 
     def _get_models_dict(self, turmas):
         turmas_dict = []
@@ -94,6 +80,17 @@ class AnsibleManager:
         self._ansible_run(
             nome_playbook="delete_container_playbook", extra_vars=extra_vars
         )
+
+    def upload_file_container(
+        self, nome_container, path_documento, nome_documento, alunos
+    ):
+        extra_vars = {
+            "nome_container": nome_container,
+            "path_documento": path_documento,
+            "nome_documento": nome_documento,
+            "users": alunos,
+        }
+        self._ansible_run(nome_playbook="upload_file_playbook", extra_vars=extra_vars)
 
     def setup_container(self, alunos: list, turmas: list):
         extra_vars = {

@@ -1,0 +1,14 @@
+- name: Sobe arquivo em container
+  hosts: jupyflow
+  vars:
+    nome_container: "{{ nome_container }}"
+    path_documento: "{{ path_documento }}"
+
+  tasks:
+    - name: Subir arquivo em containr
+      community.docker.docker_container_copy_into:
+        container: "{{nome_container}}"
+        path: "/home/comais/documentos/{{ nome_documento }}"
+        container_path: "/home/{{ item }}/documentos/{{ nome_documento }}"
+      loop:
+        "{{ users }}"

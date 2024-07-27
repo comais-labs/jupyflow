@@ -38,6 +38,15 @@
       loop:
         "{{ users }}"
 
+    - name: Criar pasta de documentos
+      community.docker.docker_container_exec:
+        container: "{{ name_container }}"
+        user: "{{ item.user }}"
+        command: /bin/bash -c 'mkdir documentos'
+        chdir: /home/{{item.user}}
+      loop:
+        "{{ users }}"
+
     - name: Configura HAProxy
       template:
         src: ../base_files/haproxy.cfg.j2
