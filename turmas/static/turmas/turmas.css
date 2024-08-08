@@ -342,3 +342,7 @@ main {
 .fill-less {
     width: 30%;
 }
+
+.document-button {
+    gap: 15px;
+}

@@ -89,6 +89,11 @@ DATABASES = {
     }
 }
 
+REMOTE_HOST = config("REMOTE_HOST")
+REMOTE_USERNAME = config("REMOTE_USERNAME")
+REMOTE_PASSWORD = config("REMOTE_PASSWORD")
+REMOTE_HOST_KEY = config("REMOTE_HOST_KEY")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

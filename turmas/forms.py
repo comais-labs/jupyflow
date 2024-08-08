@@ -2,7 +2,7 @@ from typing import Any
 from django import forms
 
 from google_api.api import GoogleAPI
-from turmas.models import ContainerTurma, Turma, Aluno, get_porta_default, UltimaPorta
+from turmas.models import ContainerTurma, Documento, Turma, Aluno, get_porta_default, UltimaPorta
 from ansible.manager import AnsibleManager
 
 google_api = GoogleAPI()
@@ -144,6 +144,22 @@ class AlunoForm(forms.ModelForm):
 
 class AlunoCreateForm(AlunoForm):
     def save(self, commit=True) -> Aluno:
+        instance = super().save()
+        if commit:
+            instance.save()
+        return instance
+
+class DocumentoCreateForm(forms.ModelForm):
+    class Meta:
+        model = Documento
+        exclude = ["turma"]
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentoCreateForm, self).__init__(*args, **kwargs)
+        self.fields['nome'].widget = forms.TextInput(attrs={"class":"form-field"})
+        self.fields['documento'].widget = forms.FileInput(attrs={"class":"form-file-field"})
+
+    def save(self, commit=True) -> Documento:
         instance = super().save()
         if commit:
             instance.save()
