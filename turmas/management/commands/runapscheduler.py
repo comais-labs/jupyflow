@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 def update_container_state(estados: list[dict]):
     for container in estados:
-        ativo = True if container["estado"] == "running" else False
+        ativo = True if container.get("estado") == "running" else False
         container_model = ContainerTurma.objects.filter(
             nome_container=container["nome_container"]
         ).first()
@@ -37,7 +37,8 @@ def healthcheck_containers():
     resultados = AnsibleManager(container=container_aux).healthcheck_containers(
         nome_containers
     )
-    update_container_state(resultados)
+    if resultados:
+        update_container_state(resultados)
 
 
 # The `close_old_connections` decorator ensures that database connections, that have become

@@ -57,18 +57,19 @@ class AnsibleManager:
 
         resultados = []
         for teste in runner.events:
-            if teste["event_data"].get("task") == "debug":
-                if res := teste["event_data"].get("res"):
-                    if res := res.get("results"):
-                        for item in res:
-                            item = item.get("msg")
-                            resultados.append(
-                                {
-                                    "nome_container": item.get("cmd")[-1],
-                                    "estado": item.get("stdout_lines")[0],
-                                }
-                            )
-
+            if event_data := teste.get("event_data"):
+                if event_data.get("task") == "debug":
+                    if res := event_data.get("res"):
+                        if res := res.get("results"):
+                            for item in res:
+                                    item = item.get("msg")
+                                    if not item.get("stderr_lines"):
+                                        resultados.append(
+                                            {
+                                                "nome_container": item.get("cmd")[-1],
+                                                "estado": item.get("stdout_lines")[0],
+                                            }
+                                        )
         return resultados
 
     def run_container(self):

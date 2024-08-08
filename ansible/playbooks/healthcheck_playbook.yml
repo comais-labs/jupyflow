@@ -5,6 +5,7 @@
     - name: Inspect jupyterhub docker container
       command: "docker container inspect -f '{{ '{{' }} .State.Status {{ '}}' }}' {{ item }}"
       register: "status_list"
+      ignore_errors: true
       loop:
         "{{ containers }}"
 

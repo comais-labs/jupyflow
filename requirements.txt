@@ -1,7 +1,7 @@
-ansible==9.5.1
-ansible-base==2.10.17
-ansible-core==2.16.6
-ansible-runner==2.3.6
+ansible
+ansible-base
+ansible-core
+ansible-runner
 APScheduler==3.10.4
 asgiref==3.8.1
 cachetools==5.3.3
