@@ -20,11 +20,13 @@
                             Curso {{ turma.nome_curso }}
                         </p>
                     </div>
+                    {% if turma.container.ativo %} 
                     <div class="turma-link">
                         <a href="http://192.168.105.8:{{turma.container.porta}}/{{turma.container.nome_container}}"
                             target="_blank" class="turma-link-button"><i class="fas fa-globe"></i> Link para a
                             turma</a>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="turma-info">
 
@@ -115,15 +117,19 @@
         </div>
     </div>
     {% if not turma.container.ativo %}
-    <div class="border rounded p-3 my-3">
-        <div style="font-size:18px;" class="arimo-bold mb-3 text-danger">
-            O container não está rodando
-        </div>
-        <div style="font-size:18px;" class="arimo-bold mb-3">
-            Mensagem de erro:
-        </div>
-        <div style="background-color:#f0f0f0;" class="border rouded p-3 my-3">
-            {{ ansible_log|linebreaksbr }}
+    <div class="card-turma">
+        <div class="card-erro">
+            <div class="card-erro-text">
+                <div style="font-size:18px;" class="text-danger">
+                    O container não está rodando.
+                </div>
+                <div style="font-size:18px;" class="">
+                    Mensagem de erro:
+                </div>
+            </div>
+            <div style="background-color:#f0dada;" class="border rouded p-3 my-3">
+                {% if turma.container.mensagem_erro %} {{ turma.container.mensagem_erro }} {% else %} Sem mensagem de erro registrada {% endif %}
+            </div>
         </div>
     </div>
     {% endif %}

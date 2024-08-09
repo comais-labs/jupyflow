@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import FormView, UpdateView
 from django.db import transaction
-import paramiko
 
 from ansible import manager
 from base.settings import BASE_DIR
@@ -158,10 +157,6 @@ class TurmaDetailView(DetailView):
         context["alunos"] = alunos
 
         container = ContainerTurma.objects.filter(turma=self.object).first()
-        if container and container.ansible_log:
-            context["ansible_log"] = codecs.decode(
-                container.ansible_log, "unicode_escape"
-            )
         return context
 
 

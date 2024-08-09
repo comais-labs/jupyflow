@@ -346,3 +346,12 @@ main {
 .document-button {
     gap: 15px;
 }
+
+.card-erro-text {
+    display: flex;
+    gap: 5px;
+}
+
+.card-erro {
+    width: 100%;
+}

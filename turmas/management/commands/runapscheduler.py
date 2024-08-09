@@ -16,7 +16,7 @@ from turmas.models import ContainerTurma
 logger = logging.getLogger(__name__)
 
 
-def update_container_state(estados: list[dict]):
+def __update_container_state(estados: list[dict]):
     for container in estados:
         ativo = True if container.get("estado") == "running" else False
         container_model = ContainerTurma.objects.filter(
@@ -24,7 +24,11 @@ def update_container_state(estados: list[dict]):
         ).first()
         if container_model.ativo != ativo:
             container_model.ativo = ativo
-            container_model.save()
+
+        if mensagem := container.get("erro"): 
+            container_model.mensagem_erro = mensagem
+        
+        container_model.save()
 
 
 def healthcheck_containers():
@@ -38,7 +42,7 @@ def healthcheck_containers():
         nome_containers
     )
     if resultados:
-        update_container_state(resultados)
+        __update_container_state(resultados)
 
 
 # The `close_old_connections` decorator ensures that database connections, that have become

@@ -63,7 +63,14 @@ class AnsibleManager:
                         if res := res.get("results"):
                             for item in res:
                                     item = item.get("msg")
-                                    if not item.get("stderr_lines"):
+                                    if item.get("stderr_lines"):
+                                        resultados.append(
+                                            {
+                                                "nome_container": item.get("cmd")[-1],
+                                                "erro": item.get("stderr"),
+                                            }
+                                        )
+                                    else:
                                         resultados.append(
                                             {
                                                 "nome_container": item.get("cmd")[-1],
