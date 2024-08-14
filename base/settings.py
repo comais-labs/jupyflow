@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "turmas",
     "usuario",
+    "documento",
     "django_apscheduler",
 ]
 

@@ -1,9 +1,9 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-from turmas.forms import DocumentoCreateForm
+from documento.views import PostarDocumentoView
+from documento.forms import DocumentoCreateForm
 from turmas.views import (
-    PostarDocumentoView,
     TurmasCreateView,
     TurmasIndexView,
     TurmaDetailView,

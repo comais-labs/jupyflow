@@ -46,6 +46,9 @@
                                 {{ form.password }}
                             </div>
                         </div>
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
                         <div class="form-button-container">
                             <input class="form-button" type="submit" value="Acessar">
                         </div>
