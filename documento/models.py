@@ -24,6 +24,10 @@ class Diretorio(models.Model):
 
 
 class DocumentoManager(models.Manager):
+    def __get_document_name(self, file: str, name: str):
+        extension = file.name.split(".")[-1]
+        return f"{name}.{extension}"
+
     def __get_file_path(self, filename: str):
         return f"/home/comais/documentos/{filename}"
 
@@ -44,13 +48,9 @@ class DocumentoManager(models.Manager):
             path_documento=path_documento,
         )
 
-    def create_one(self, turma: Turma, documento: "Documento"):
-        documento.save()
-
-        path_documento = f"{str(BASE_DIR)}/{documento.documento.name}"
-        nome_documento = path_documento.split("/")[-1]
+    def create_one(self, turma: Turma, nome: str, documento: InMemoryUploadedFile):
+        nome_documento = self.__get_document_name(file=documento, name=nome)
         nome_container = turma.container.nome_container
-
         nomes_alunos = [
             str(aluno)
             for aluno in Aluno.objects.filter(turma=turma).values_list(
@@ -58,21 +58,24 @@ class DocumentoManager(models.Manager):
             )
         ]
 
-        self._create_in_container(
-            path_documento=path_documento,
-            nome_documento=nome_documento,
-            nomes_alunos=nomes_alunos,
-            nome_container=nome_container,
-        )
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(documento.read())
+            self._create_in_container(
+                path_documento=tmp.name,
+                nome_documento=nome_documento,
+                nomes_alunos=nomes_alunos,
+                nome_container=nome_container,
+            )
+
+        return self.__get_file_path(nome_documento)
 
     def create_multiple(
         self, nome: str, turmas: list[str], documento: InMemoryUploadedFile
-    ):
+    ) -> str:
         turmas = [Turma.objects.filter(id=id).first() for id in turmas]
         extensao = documento.name.split(".")[-1]
         nome_documento = f"{nome}.{extensao}"
 
-        documento.caminho = self.__get_file_path(nome_documento)
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(documento.read())
 
@@ -91,6 +94,8 @@ class DocumentoManager(models.Manager):
                     nomes_alunos=nomes_alunos,
                     nome_container=nome_container,
                 )
+
+        return self.__get_file_path(nome_documento)
 
 
 class Documento(models.Model):

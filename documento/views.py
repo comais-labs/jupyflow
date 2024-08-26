@@ -20,7 +20,13 @@ class PostarDocumentoView(FormView):
     @transaction.atomic
     def form_valid(self, form):
         turma = Turma.objects.filter(id=self.kwargs["pk"]).first()
-        Documento.objects.create_one(turma=turma, documento=form.instance)
+        nome = self.request.POST.get("nome")
+        documento = self.request.FILES.get("documento")
+
+        form.instance.caminho = Documento.objects.create_one(
+            turma=turma, nome=nome, documento=documento
+        )
+        form.save()
 
         return super().form_valid(form)
 
@@ -39,8 +45,11 @@ class PostarDocumentoVariasTurmasView(FormView):
         turmas = self.request.POST.getlist("turmas")
         documento = self.request.FILES.get("documento")
 
-        Documento.objects.create_multiple(nome=nome, turmas=turmas, documento=documento)
+        form.instance.caminho = Documento.objects.create_multiple(
+            nome=nome, turmas=turmas, documento=documento
+        )
         form.save()
+
         return super().form_valid(form)
 
 
