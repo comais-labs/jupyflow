@@ -72,6 +72,7 @@
 
 .subtitle {
     font-size: 16px;
+    margin: 0;
 }
 
 .form-field {
@@ -115,3 +116,13 @@
     gap: 15px;
 }
 
+.error-message {
+    background-color:#f0dada ;
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    color: #DC3545;
+}

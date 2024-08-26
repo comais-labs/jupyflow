@@ -116,21 +116,6 @@ class TurmaUpdateForm(TurmaForm):
     def __init__(self, *args, **kwargs):
         super(TurmaUpdateForm, self).__init__(*args, **kwargs)
 
-        self.fields["nome_container"] = forms.CharField(
-            label="Nome do container",
-            max_length=20,
-            required=True,
-            initial=self.instance.container.nome_container,
-            widget=forms.TextInput(attrs={"class": "form-field"}),
-        )
-        self.fields["porta"] = forms.CharField(
-            label="Porta do container",
-            required=False,
-            initial=self.instance.container.porta,
-            widget=forms.TextInput(attrs={"class": "form-field"}),
-        )
-
-
 class AlunoForm(forms.ModelForm):
     class Meta:
         model = Aluno

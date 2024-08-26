@@ -48,7 +48,8 @@ class AnsibleManager:
         }
         self._ansible_run(nome_playbook="usuario_playbook", extra_vars=extra_vars)
 
-    def healthcheck_containers(self, containers: list[str]):
+    @staticmethod
+    def healthcheck_containers(containers: list[str]):
         extra_vars = {"containers": containers}
         runner = ansible_runner.run(
             playbook=f"{BASE_DIR}/ansible/playbooks/healthcheck_playbook.yml",

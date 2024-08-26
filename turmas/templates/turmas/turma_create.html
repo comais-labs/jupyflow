@@ -11,7 +11,7 @@
 		<form method="POST">
 			{% csrf_token %}
 			<div style="font-size:24px;" class="arimo-bold">
-				Criar turma
+				{% if not update %} Criar turma {% else %} Atualizar turma {% endif %}
 			</div>
 			<div class="text-fields-container">
 				<div class="form-field-container">
@@ -37,7 +37,7 @@
 					</ul>
 					{% endif %}
 				</div>
-
+				{% if not update %}
 				<div class="form-field-container">
 					<b>{{ form.nome_container.label }}:</b>
 					{{ form.nome_container }}
@@ -61,10 +61,12 @@
 					</ul>
 					{% endif %}
 				</div>
+				{% endif %}
 			</div>
 
 
 
+			{% if not update %}
 			<div class="form-field-container">
 				<select id="tipo_lista" class="form-select">
 					<option value="none">Selecionar...</option>
@@ -96,10 +98,16 @@
 				</ul>
 				{% endif %}
 			</div>
+			{% endif %}
 
 			<div class="">
+				{% if not update %}
 				<input style="background-color:#00897B;font-weight:bold;" class="btn w-25 text-white" type="submit"
 					value="Criar turma">
+				{% else %}
+				<input style="background-color:#00897B;font-weight:bold;" class="btn w-25 text-white" type="submit"
+					value="Atualizar turma">
+				{% endif %}
 			</div>
 		</form>
 	</div>

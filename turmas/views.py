@@ -19,7 +19,6 @@ class TurmasIndexView(TemplateView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["turmas"] = Turma.objects.all()
-        google_api = GoogleAPI()
 
         return context
 
@@ -100,6 +99,11 @@ class TurmasUpdateView(UpdateView):
     form_class = TurmaUpdateForm
     model = Turma
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['update'] = True
+        return context
+
     def get_success_url(self) -> str:
         return reverse_lazy("turmas:ver", kwargs={"pk": self.kwargs["pk"]})
 
@@ -151,8 +155,6 @@ class TurmaDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         alunos = Aluno.objects.filter(turma=self.object)
         context["alunos"] = alunos
-
-        container = ContainerTurma.objects.filter(turma=self.object).first()
         return context
 
 

@@ -13,16 +13,13 @@ from usuario.forms import LoginForm
 class LoginView(FormView):
     template_name = "usuario/login.html"
     form_class = LoginForm
+    success_url = reverse_lazy("turmas:index")
 
-    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        usuario = authenticate(request, username=username, password=password)
-        if usuario:
-            login(request, usuario)
-            return redirect(reverse_lazy("turmas:index"))
-        else:
-            return super().post(request, *args, **kwargs)
+    def form_valid(self, form):
+        usuario = form.get_user()
+        login(self.request, usuario)
+        return super().form_valid(form)
+
 
 def logout_user_view(request):
     if request.method == "POST":

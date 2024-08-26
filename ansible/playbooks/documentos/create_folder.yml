@@ -1,0 +1,15 @@
+- name: Cria pasta em container
+  hosts: jupyflow
+  vars:
+    nome_container: "{{ nome_container }}"
+    path_pasta: "{{ path_pasta }}"
+
+  tasks:
+    - name: Criar pasta de documentos
+      community.docker.docker_container_exec:
+        container: "{{ nome_container }}"
+        user: "{{ item.user }}"
+        command: /bin/bash -c 'mkdir {{ path_pasta }}'
+        chdir: /home/{{item.user}}
+      loop:
+        "{{ users }}"

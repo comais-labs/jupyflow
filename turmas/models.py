@@ -23,7 +23,9 @@ class ContainerTurma(models.Model):
 class Turma(models.Model):
     nome_curso = models.CharField("Nome do curso", max_length=200, null=False)
     nome_turma = models.CharField("Nome da turma", max_length=200, null=False)
-    container = models.ForeignKey(ContainerTurma, on_delete=models.CASCADE, null=True)
+    container = models.OneToOneField(
+        ContainerTurma, on_delete=models.CASCADE, null=True
+    )
 
     def __str__(self):
         return f"{self.nome_curso} - {self.nome_turma}"
