@@ -14,6 +14,9 @@
 			<div class="d-flex justify-content-end">
 				<a class="create-button" href="{% url 'turmas:criar' %}">Criar nova turma</a>
 			</div>
+			<div class="d-flex justify-content-end">
+				<a class="create-button" href="{% url 'documento:criar_varios' %}">Postar documento</a>
+			</div>
 		</div>
 		<div class="turmas-container">
 			{% for turma in turmas %}
